@@ -41,6 +41,6 @@ public class ProductCategory {
         this.categoryType = categoryType;
     }
 
-    public ProductCategory() {
+   public ProductCategory() {
     }
 }

@@ -35,7 +35,7 @@ public class ProductCategoryRepositoryTest {
     }
 
     @Test
-    @Transactional
+    //@Transactional
     public void updateTest() {
         ProductCategory productCategory = productCategoryRepository.findByCategoryId(2);
         productCategory.setCategoryName("男生最爱");
