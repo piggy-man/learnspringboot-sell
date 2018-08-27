@@ -22,26 +22,26 @@ public class CategoryServiceImplTest {
 
     @Test
     public void findOne() {
-        ProductCategory productCategory=categoryService.findOne(1);
-        Assert.assertEquals(new Integer(1),productCategory.getCategoryId());
+        ProductCategory productCategory = categoryService.findOne(1);
+        Assert.assertEquals(new Integer(1), productCategory.getCategoryId());
     }
 
     @Test
     public void findAll() {
-        List<ProductCategory> productCategoryList=categoryService.findAll();
-        Assert.assertNotEquals(0,productCategoryList.size());
+        List<ProductCategory> productCategoryList = categoryService.findAll();
+        Assert.assertNotEquals(0, productCategoryList.size());
 
     }
 
     @Test
     public void findByCategoryTypeListIn() {
-        List<ProductCategory> productCategoryList=categoryService.findByCategoryTypeListIn(Arrays.asList(1,2,3,4));
-        Assert.assertNotEquals(0,productCategoryList.size());
+        List<ProductCategory> productCategoryList = categoryService.findByCategoryTypeListIn(Arrays.asList(1, 2, 3, 4));
+        Assert.assertNotEquals(0, productCategoryList.size());
     }
 
     @Test
     public void save() {
-        ProductCategory productCategory=new ProductCategory("男生专享",10);
+        ProductCategory productCategory = new ProductCategory("男生专享", 10);
         ProductCategory result = categoryService.save(productCategory);
         Assert.assertNotNull(result);
 
