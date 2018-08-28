@@ -2,6 +2,8 @@ package com.sell.VO;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ResultVO<T> {
 
@@ -9,7 +11,7 @@ public class ResultVO<T> {
 
     private String msg;
 
-    private T data;
+    private List<ProductVO> data;
 
     public ResultVO() {
     }
