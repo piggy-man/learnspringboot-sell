@@ -1,4 +1,4 @@
-package enums;
+package com.sell.enums;
 
 import lombok.Getter;
 

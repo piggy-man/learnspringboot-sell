@@ -3,7 +3,7 @@ package com.sell.service.serviceImpl;
 import com.sell.dataobject.ProductInfo;
 import com.sell.repository.ProductInfoRepository;
 import com.sell.service.ProductService;
-import enums.ProductStatusEnum;
+import com.sell.enums.ProductStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
