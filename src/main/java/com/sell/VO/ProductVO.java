@@ -12,6 +12,6 @@ public class ProductVO {
     private String categoryName;
     @JsonProperty("id")
     private Integer categoryType;
-
-    private List<ProductInfoVO> foods;
+    @JsonProperty("foods")
+    private List<ProductInfoVO> productInfoVOList;
 }

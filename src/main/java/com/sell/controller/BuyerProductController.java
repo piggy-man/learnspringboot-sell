@@ -3,32 +3,77 @@ package com.sell.controller;
 import com.sell.VO.ProductInfoVO;
 import com.sell.VO.ProductVO;
 import com.sell.VO.ResultVO;
+import com.sell.dataobject.ProductCategory;
+import com.sell.dataobject.ProductInfo;
+import com.sell.enums.ProductStatusEnum;
+import com.sell.service.CategoryService;
+import com.sell.service.ProductService;
+import com.sell.service.serviceImpl.ProductServiceImpl;
+import org.aspectj.weaver.patterns.TypeCategoryTypePattern;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/buyer/product")
 public class BuyerProductController {
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping("/list")
     public ResultVO list() {
+        //查询所有上架商品
+        List<ProductInfo> productInfoList = productService.findUpAll();
+
+        //查询类目（一次查询）
+        List<Integer> productCategoryTypeList = new ArrayList<>();
+
+        for (ProductInfo productInfo : productInfoList) {
+            productCategoryTypeList.add(productInfo.getCategoryType());
+        }
+
+        List<ProductCategory> productCategoryList = categoryService.findByCategoryTypeListIn(productCategoryTypeList);
+
+        //System.out.println(productCategoryList.toString());
+
+
+        //结果组装
+
+        List<ProductVO> productVOList = new ArrayList<>();
+
+        for (ProductCategory productCategory : productCategoryList) {
+            ProductVO productVO = new ProductVO();
+            productVO.setCategoryType(productCategory.getCategoryType());
+            productVO.setCategoryName(productCategory.getCategoryName());
+
+
+            List<ProductInfoVO> productInfoVOList = new ArrayList<>();
+            for (ProductInfo productInfo : productInfoList) {
+                if (productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
+                    ProductInfoVO productInfoVO = new ProductInfoVO();
+                    BeanUtils.copyProperties(productInfo, productInfoVO);
+                    productInfoVOList.add(productInfoVO);
+                }
+            }
+            productVO.setProductInfoVOList(productInfoVOList);
+            productVOList.add(productVO);
+        }
         ResultVO resultVO = new ResultVO();
-        ProductVO productVO = new ProductVO();
-        ProductInfoVO productInfoVO = new ProductInfoVO();
+
 
         resultVO.setCode(0);
         resultVO.setMsg("成功");
-        List<ProductVO> datalist = Arrays.asList(productVO);
-        resultVO.setData(datalist);
-
-        List<ProductInfoVO> foodslist = Arrays.asList(productInfoVO);
-        productVO.setFoods(foodslist);
-
-
+        resultVO.setData(productVOList);
 
 
         return resultVO;
