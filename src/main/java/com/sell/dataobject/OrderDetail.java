@@ -1,8 +1,5 @@
 package com.sell.dataobject;
 
-
-import com.sell.enums.OrderStatusEnum;
-import com.sell.enums.PayStatusEnum;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,28 +12,26 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
+@DynamicUpdate
 @Data
 @GenericGenerator(name = "system-uuid", strategy = "uuid")
-@DynamicUpdate
-public class OrderMaster {
+public class OrderDetail {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @Column(length = 32)
+    private String detailId;
+
     private String orderId;
 
-    private String buyerName;
+    private String productId;
 
-    private String buyerPhone;
+    private String productName;
 
-    private String buyerAddress;
+    private BigDecimal productPrice;
 
-    private String buyerOpenId;
+    private Integer productQuantity;
 
-    private BigDecimal orderAmount;
-
-    private Integer orderStatus = OrderStatusEnum.NEW.getCode();
-
-    private Integer payStatus = PayStatusEnum.WAIT.getCode();
+    private String productIcon;
 
     @org.hibernate.annotations.CreationTimestamp
     private Date createTime;
@@ -44,6 +39,5 @@ public class OrderMaster {
     @org.hibernate.annotations.UpdateTimestamp
     private Date updateTime;
 
-    public OrderMaster() {
-    }
+
 }
