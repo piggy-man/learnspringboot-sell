@@ -11,12 +11,12 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Data
-@GenericGenerator(name = "system-uuid",strategy = "uuid")
+//@GenericGenerator(name = "system-uuid",strategy = "uuid")
 public class ProductInfo {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @Column(length = 32)
+    @GeneratedValue
+    private Integer id;
     private String productId;
 
     private String productName;

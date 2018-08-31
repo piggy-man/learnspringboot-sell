@@ -4,21 +4,19 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @DynamicUpdate
 @Data
-@GenericGenerator(name = "system-uuid", strategy = "uuid")
+//@GenericGenerator(name = "system-uuid", strategy = "uuid")
 public class OrderDetail {
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @Column(length = 32)
+    @GeneratedValue
+    private Integer id;
+
     private String detailId;
 
     private String orderId;
