@@ -63,13 +63,16 @@ public class OrderServiceImpl implements OrderService {
 
         //写入订单数据库（两张表OrderMaster OrderDetail）
         OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO, orderMaster);
         orderMaster.setOrderId(orderId);
         orderMaster.setOrderAmount(orderAmount);
-        BeanUtils.copyProperties(orderDTO, orderMaster);
+        orderMaster.setPayStatus(0);
+        orderMaster.setOrderStatus(0);
+
         orderMasterRepository.save(orderMaster);
 
         //扣库存
-        productService.decreseStock(cartDTOList);
+        productService.decreaseStock(cartDTOList);
         return orderDTO;
     }
 
