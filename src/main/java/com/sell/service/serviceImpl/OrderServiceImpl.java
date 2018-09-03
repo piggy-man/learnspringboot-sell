@@ -1,14 +1,23 @@
 package com.sell.service.serviceImpl;
 
 import com.sell.dataobject.OrderDetail;
+import com.sell.dataobject.OrderMaster;
+import com.sell.dataobject.ProductInfo;
 import com.sell.dto.OrderDTO;
+import com.sell.enums.ResultEnum;
+import com.sell.exception.SellException;
+import com.sell.repository.OrderDetailRepository;
 import com.sell.repository.OrderMasterRepository;
 import com.sell.service.OrderService;
 import com.sell.service.ProductService;
+import com.sell.utils.KeyUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -18,19 +27,39 @@ public class OrderServiceImpl implements OrderService {
     private OrderMasterRepository orderMasterRepository;
 
     @Autowired
+    private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
     private ProductService productService;
 
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
         //查询商品价格
+        //遍历订单中的商品详情并查询出单价
 
+        BigDecimal orderAmount=new BigDecimal(BigInteger.ZERO);
+        String orderId=KeyUtil.KeyUniqueUtil();
         for (OrderDetail orderDetail:orderDTO.getOrderDetailList()){
-            productService.findOne(orderDetail.getProductId());
+            ProductInfo productInfo=productService.findOne(orderDetail.getProductId());
+            if (productInfo==null){
+                throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+            }
+            //计算出总价
+            orderAmount=productInfo.getProductPrice().multiply(new BigDecimal(orderDetail.getProductQuantity())).add(orderAmount);
+
+            orderDetail.setOrderId(orderId);
+            orderDetail.setDetailId(KeyUtil.KeyUniqueUtil());
+            BeanUtils.copyProperties(productInfo,orderDetail);
+            orderDetailRepository.save(orderDetail);
+
         }
 
-        //计算总价
-
         //写入订单数据库（两张表OrderMaster OrderDetail）
+        OrderMaster orderMaster=new OrderMaster();
+        orderMaster.setOrderId(orderId);
+        orderMaster.setOrderAmount(orderAmount);
+        BeanUtils.copyProperties(orderDTO,orderMaster);
+        orderMasterRepository.save(orderMaster);
 
         //扣库存
         return OrderDTO;
