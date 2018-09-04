@@ -1,5 +1,6 @@
 package com.sell.service.serviceImpl;
 
+import com.sell.converter.OrderMaster2OrderDTO;
 import com.sell.dataobject.OrderDetail;
 import com.sell.dataobject.OrderMaster;
 import com.sell.dataobject.ProductInfo;
@@ -14,8 +15,11 @@ import com.sell.service.ProductService;
 import com.sell.utils.KeyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -82,12 +86,31 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO findOne(String orderId) {
-        return null;
+        OrderMaster orderMaster=new OrderMaster();
+        orderMaster=orderMasterRepository.findByOrderId(orderId);
+        if (orderMaster==null){
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
+        List<OrderDetail> orderDetailList=new ArrayList<>();
+        orderDetailList=orderDetailRepository.findByOrderId(orderId);
+        if (CollectionUtils.isEmpty(orderDetailList)){
+            throw new SellException(ResultEnum.ORDERDETAIL_NOT_EXIST);
+        }
+        OrderDTO orderDTO=new OrderDTO();
+        BeanUtils.copyProperties(orderMaster,orderDTO);
+        orderDTO.setOrderDetailList(orderDetailList);
+
+        return orderDTO;
     }
 
     @Override
-    public List<OrderDTO> findOrderList(String buyerId, Pageable pageable) {
-        return null;
+    public Page<OrderDTO> findOrderList(String buyerId, Pageable pageable) {
+        Page<OrderMaster> orderMasterPage=orderMasterRepository.findByBuyerOpenId(buyerId,pageable);
+       List<OrderDTO> orderDTOList=OrderMaster2OrderDTO.convert(orderMasterPage.getContent());
+       return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements()) ;
+
+
+
     }
 
     @Override

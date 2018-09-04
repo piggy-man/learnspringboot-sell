@@ -1,6 +1,7 @@
 package com.sell.service;
 
 import com.sell.dto.OrderDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface OrderService {
     OrderDTO findOne(String orderId);
 
     // 查询订单列表
-    List<OrderDTO> findOrderList(String buyerId, Pageable pageable);
+    Page<OrderDTO> findOrderList(String buyerId, Pageable pageable);
     // 取消订单
     OrderDTO cancelOrder(OrderDTO orderDTO);
     // 完结订单
