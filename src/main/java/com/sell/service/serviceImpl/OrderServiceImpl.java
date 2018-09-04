@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -57,9 +58,12 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setDetailId(KeyUtil.KeyUniqueUtil());
             BeanUtils.copyProperties(productInfo, orderDetail);
             orderDetailRepository.save(orderDetail);
-            CartDTO cartDTO = new CartDTO(orderDetail.getProductId(), orderDetail.getProductQuantity());
-            cartDTOList.add(cartDTO);
+            //CartDTO cartDTO = new CartDTO(orderDetail.getProductId(), orderDetail.getProductQuantity());
+            //cartDTOList.add(cartDTO);
         }
+        cartDTOList=orderDTO.getOrderDetailList().stream().map(e->
+                new CartDTO(e.getProductId(),e.getProductQuantity())
+                ).collect(Collectors.toList());
 
         //写入订单数据库（两张表OrderMaster OrderDetail）
         OrderMaster orderMaster = new OrderMaster();
