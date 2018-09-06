@@ -119,15 +119,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO cancelOrder(OrderDTO orderDTO) {
         OrderMaster orderMaster = new OrderMaster();
-        BeanUtils.copyProperties(orderDTO, orderMaster);
-
         //查询订单状态
         if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             log.error("【取消订单】订单状态不正确 orderId={},orderStatus={}", orderDTO.getOrderId(), orderDTO.getOrderStatus());
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
         //取消订单
-        orderMaster.setOrderStatus(OrderStatusEnum.CANCEL.getCode());
+        orderMaster = orderMasterRepository.findByOrderId(orderDTO.getOrderId());
+        orderDTO.setOrderStatus(OrderStatusEnum.CANCEL.getCode());
+        BeanUtils.copyProperties(orderDTO, orderMaster); 
         OrderMaster orderMaster1 = orderMasterRepository.save(orderMaster);
         if (orderMaster1 == null) {
             log.error("【取消订单】更新失败，orderMaster={}", orderMaster1);
