@@ -94,7 +94,11 @@ public class OrderServiceImplTest {
 
     @Test
     public void finish() {
+        OrderDTO orderDTO1 = orderService.findOne(ORDERID);
+        OrderDTO result = orderService.finish(orderDTO1);
+        Assert.assertEquals(OrderStatusEnum.FINISHED.getCode(), result.getOrderStatus());
     }
+
 
     @Test
     public void paid() {
