@@ -102,6 +102,9 @@ public class OrderServiceImplTest {
 
     @Test
     public void paid() {
+        OrderDTO orderDTO1 = orderService.findOne(ORDERID);
+        OrderDTO result = orderService.paid(orderDTO1);
+        Assert.assertEquals(PayStatusEnum.SUCCESS.getCode(), result.getPayStatus());
     }
 
 }
