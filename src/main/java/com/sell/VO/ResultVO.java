@@ -11,7 +11,7 @@ public class ResultVO<T> {
 
     private String msg;
 
-    private List<ProductVO> data;
+    private T data;
 
     public ResultVO() {
     }
