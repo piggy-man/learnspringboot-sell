@@ -13,4 +13,9 @@ spring:
 server:
   servlet:
     context-path: /sell
+  port: 8080
+appID: wx68c1e83f731d1c75
+appsecret: 6363c7aa4178ac8669c3565c0ec2421b
+
+
 
