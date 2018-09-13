@@ -17,6 +17,10 @@ server:
 wechat:
   mpAppID: wx68c1e83f731d1c75
   mpAppSecret: 6363c7aa4178ac8669c3565c0ec2421b
+  mchId: 支付需要的参数
+  mchKey: 支付需要的参数
+  keyPath: 支付验证后的那个文件，确保可以读取
+  notifyUrl: http://piggy007.natapp1.cc/sell/pay/notify
 
 
 
