@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URLEncoder;
 
+import static java.net.URLEncoder.encode;
+
 @Controller
 @RequestMapping("/wechat")
 @Slf4j
