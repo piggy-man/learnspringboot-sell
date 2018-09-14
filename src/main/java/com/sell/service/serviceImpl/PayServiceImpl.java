@@ -10,9 +10,12 @@ import com.sell.exception.SellException;
 import com.sell.service.OrderService;
 import com.sell.service.PayService;
 import com.sell.utils.JsonUtil;
+import com.sell.utils.MathUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 @Slf4j
@@ -53,11 +56,10 @@ public class PayServiceImpl implements PayService {
             log.error("【微信支付】查无此订单，orderId={}", orderDTO.getOrderId());
         }
         //3、验证金额
-        if (!orderDTO.getOrderAmount().equals(payResponse.getOrderAmount())) {
+        if (!MathUtil.equals(payResponse.getOrderAmount(),orderDTO.getOrderAmount().doubleValue())) {
             log.error("【微信支付】订单金额与支付金额不符，订单金额={}，支付金额={}", orderDTO.getOrderAmount(), payResponse.getOrderAmount());
             throw new SellException(ResultEnum.WXPAY_NOTIFY_MONEY_VERIFY_ERROR);
         }
-
         log.info("【支付异步通知】payResponse={}", JsonUtil.toJson(payResponse));
         //修改订单支付状态
         orderService.paid(orderDTO);
