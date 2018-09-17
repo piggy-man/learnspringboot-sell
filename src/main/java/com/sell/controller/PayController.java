@@ -47,7 +47,8 @@ public class PayController {
     }
 
     @PostMapping("/notify")
-    public void notify(@RequestBody String notifyData){
+    public ModelAndView notify(@RequestBody String notifyData){
+        return new ModelAndView("pay/success");
 
     }
 
