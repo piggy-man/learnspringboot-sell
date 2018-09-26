@@ -12,90 +12,71 @@
                     <thead>
                     <tr>
                         <th>
-                            编号
+                            订单Id
                         </th>
                         <th>
-                            产品
+                            姓名
                         </th>
                         <th>
-                            交付时间
+                            手机号
                         </th>
                         <th>
-                            状态
+                            地址
+                        </th>
+                        <th>
+                            金额
+                        </th>
+                        <th>
+                            订单状态
+                        </th>
+
+                        <th>
+                            支付状态
+                        </th>
+                        <th>
+                            创建时间
+                        </th>
+                        <th colspan="2">
+                            操作
                         </th>
                     </tr>
                     </thead>
                     <tbody>
+                    <#list orderDTOPage.content as orderDTO>
                     <tr>
                         <td>
-                            1
+                            ${orderDTO.orderId}
                         </td>
                         <td>
-                            TB - Monthly
+                            ${orderDTO.buyerName}
                         </td>
                         <td>
-                            01/04/2012
+                            ${orderDTO.buyerPhone}
                         </td>
                         <td>
-                            Default
+                            ${orderDTO.buyerAddress}
+                        </td>
+                        <td>
+                            ${orderDTO.orderAmount}
+                        </td>
+                        <td>
+                            ${orderDTO.getOrderStatusEnum().getMsg()}
+                        </td>
+                        <td>
+                            ${orderDTO.getPayStatusEnum().getMsg()}
+                        </td>
+                        <td>
+                            ${orderDTO.createTime}
+                        </td>
+
+                        <td>
+                            详情
+                        </td>
+                        <td>
+                            取消
                         </td>
                     </tr>
-                    <tr class="success">
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            TB - Monthly
-                        </td>
-                        <td>
-                            01/04/2012
-                        </td>
-                        <td>
-                            Approved
-                        </td>
-                    </tr>
-                    <tr class="error">
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            TB - Monthly
-                        </td>
-                        <td>
-                            02/04/2012
-                        </td>
-                        <td>
-                            Declined
-                        </td>
-                    </tr>
-                    <tr class="warning">
-                        <td>
-                            3
-                        </td>
-                        <td>
-                            TB - Monthly
-                        </td>
-                        <td>
-                            03/04/2012
-                        </td>
-                        <td>
-                            Pending
-                        </td>
-                    </tr>
-                    <tr class="info">
-                        <td>
-                            4
-                        </td>
-                        <td>
-                            TB - Monthly
-                        </td>
-                        <td>
-                            04/04/2012
-                        </td>
-                        <td>
-                            Call in to confirm
-                        </td>
-                    </tr>
+                    </#list>
                     </tbody>
                 </table>
             </div>

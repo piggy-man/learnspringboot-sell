@@ -1,9 +1,13 @@
 package com.sell.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sell.dataobject.OrderDetail;
 
+import com.sell.enums.OrderStatusEnum;
+import com.sell.enums.PayStatusEnum;
+import com.sell.utils.EnumUtil;
 import com.sell.utils.serialize.Date2Serializer;
 import lombok.Data;
 
@@ -40,4 +44,14 @@ public class OrderDTO {
     private Date updateTime;
 
     private List<OrderDetail> orderDetailList ;
+    @JsonIgnore
+    public OrderStatusEnum getOrderStatusEnum(){
+        return EnumUtil.findByCode(orderStatus,OrderStatusEnum.class);
+    }
+    @JsonIgnore
+    public PayStatusEnum getPayStatusEnum(){
+        return EnumUtil.findByCode(payStatus,PayStatusEnum.class);
+    }
+
+
 }
