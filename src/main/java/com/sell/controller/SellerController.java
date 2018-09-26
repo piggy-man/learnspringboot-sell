@@ -27,7 +27,8 @@ public class SellerController {
         PageRequest pageRequest=PageRequest.of(page-1,size);
         Page<OrderDTO> orderDTOPage=orderService.findAll(pageRequest);
         map.put("orderDTOPage",orderDTOPage);
-
+        map.put("currentPage",page);
+        map.put("size",size);
         ModelAndView modelAndView =  new ModelAndView ("order/list",map);
         return modelAndView;
     }
