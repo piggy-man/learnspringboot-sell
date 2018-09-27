@@ -70,7 +70,7 @@
                         </td>
 
                         <td>
-                            详情
+                            <a href="/sell/seller/order/detail?orderId=${orderDTO.orderId}">详情</a>
                         </td>
                         <td>
                             <#if orderDTO.getOrderStatusEnum().msg !="已取消">
