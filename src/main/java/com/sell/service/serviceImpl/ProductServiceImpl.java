@@ -18,6 +18,10 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
+    @Autowired
+    private ProductInfoRepository productInfoRepository;
+
+
     @Override
     public void increaseStock(List<CartDTO> cartDTOList) {
         for (CartDTO cartDTO : cartDTOList) {
@@ -47,8 +51,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Autowired
-    private ProductInfoRepository productInfoRepository;
+
 
     @Override
     public ProductInfo findOne(String productId) {
@@ -67,6 +70,34 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductInfo save(ProductInfo productInfo) {
+        return productInfoRepository.save(productInfo);
+    }
+
+    //上架操作
+    @Override
+    public ProductInfo onSale(String productId) {
+        ProductInfo productInfo=productInfoRepository.findByProductId(productId);
+        if (productInfo==null){
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
+        if (productInfo.getProductStatus()==ProductStatusEnum.UP) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.UP.getCode());
+        return productInfoRepository.save(productInfo);
+
+    }
+    //下架操作
+    @Override
+    public ProductInfo offSale(String productId) {
+        ProductInfo productInfo=productInfoRepository.findByProductId(productId);
+        if (productInfo==null){
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
+        if (productInfo.getProductStatus()==ProductStatusEnum.DOWN) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getCode());
         return productInfoRepository.save(productInfo);
     }
 }
