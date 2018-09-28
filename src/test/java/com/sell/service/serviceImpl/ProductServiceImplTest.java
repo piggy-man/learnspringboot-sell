@@ -32,7 +32,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void findAll() {
-        PageRequest request=new PageRequest(0,2);
+        PageRequest request= PageRequest.of(0,2);
         Page<ProductInfo> list=productService.findAll(request);
         System.out.println(list.getTotalElements());
     }
