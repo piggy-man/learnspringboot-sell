@@ -2,6 +2,8 @@ package com.sell.controller;
 
 import com.sell.dataobject.ProductCategory;
 import com.sell.dataobject.ProductInfo;
+import com.sell.enums.ProductStatusEnum;
+import com.sell.exception.SellException;
 import com.sell.service.CategoryService;
 import com.sell.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,35 @@ public class SellerProductController {
         map.put("size",size);
         //map.put("productCategoryList",productCategoryList);
         return new ModelAndView("product/list",map);
+    }
+
+    @GetMapping("/on_sale")
+    public ModelAndView onSale(@RequestParam("productId") String productId,
+                               Map<String,Object>map){
+        try{
+            productService.onSale(productId);
+
+        }catch (SellException e){
+            map.put("msg",e.getMessage());
+            map.put("url","/sell/seller/product/list");
+            return new ModelAndView("common/error",map);
+        }
+        map.put("url","/sell/seller/product/list");
+        return new ModelAndView("common/success",map);
+    }
+
+    @GetMapping("/off_sale")
+    public ModelAndView offSale(@RequestParam("productId") String productId,
+                                Map<String,Object> map){
+        try{
+            productService.offSale(productId);
+        }catch (SellException e){
+            map.put("msg",e.getMessage());
+            map.put("url","/sell/seller/product/list");
+            return new ModelAndView("common/error",map);
+        }
+        map.put("url","/sell/seller/product/list");
+        return new ModelAndView("common/success",map);
 
     }
 
