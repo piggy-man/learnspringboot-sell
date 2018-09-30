@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,7 +78,16 @@ public class SellerProductController {
         }
         map.put("url","/sell/seller/product/list");
         return new ModelAndView("common/success",map);
-
     }
-
+    @GetMapping("/index")
+    public ModelAndView index(@RequestParam(value = "productId",required = false) String productId,
+                              Map<String,Object> map){
+        ProductInfo productInfo=productService.findOne(productId);
+        if (!StringUtils.isEmpty(productInfo)){
+            map.put("productInfo",productInfo);
+        }
+        List<ProductCategory> productCategoryList = categoryService.findAll();
+        map.put("productCategoryList",productCategoryList);
+        return new ModelAndView("product/index",map);
+    }
 }
