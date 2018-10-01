@@ -2,12 +2,12 @@ package com.sell.controller;
 
 import com.sell.dataobject.ProductCategory;
 import com.sell.dataobject.ProductInfo;
-import com.sell.enums.ProductStatusEnum;
 import com.sell.exception.SellException;
 import com.sell.forms.ProductForm;
 import com.sell.service.CategoryService;
 import com.sell.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -25,11 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/seller/product")
 @Slf4j
+@DynamicUpdate
 public class SellerProductController {
 
     @Autowired
@@ -100,14 +100,15 @@ public class SellerProductController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@RequestParam("productForm") ProductForm productForm,
+    public ModelAndView save(@Valid ProductForm productForm,
+                             BindingResult bindingResult,
                              Map<String,Object>map){
-        /*
+
         if (bindingResult.hasErrors()) {
             map.put("msg",bindingResult.getFieldError().getDefaultMessage());
             map.put("url","/sell/seller/product/index");
             return new ModelAndView("common/error",map);
-        }*/
+        }
 
         if (productForm.getProductId().isEmpty()){
 
@@ -123,6 +124,7 @@ public class SellerProductController {
             }
         }else {
             ProductInfo productInfo1=productService.findOne(productForm.getProductId());
+            log.info("查找出来的商品是productInfo1={}",productInfo1);
             BeanCopier copier=BeanCopier.create(ProductForm.class,ProductInfo.class,false);
             copier.copy(productForm,productInfo1,null);
             productService.save(productInfo1);
