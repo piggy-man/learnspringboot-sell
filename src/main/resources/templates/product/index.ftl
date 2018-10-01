@@ -21,7 +21,7 @@
                         </div>
                         <div class="form-group">
                             <label>库存</label>
-                            <input name="productStock" type="number" class="form-control" value="${(productInfo.productStock)!""}" />
+                            <input name="productStock" type="text" class="form-control" value="${(productInfo.productStock)!""}" />
                         </div>
                         <div class="form-group">
                             <label>商品描述</label>

@@ -8,7 +8,6 @@ import com.sell.service.CategoryService;
 import com.sell.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.data.domain.Page;
@@ -110,24 +109,16 @@ public class SellerProductController {
             return new ModelAndView("common/error",map);
         }
 
-        if (productForm.getProductId().isEmpty()){
-
-            ProductInfo productInfo=new ProductInfo();
-            BeanUtils.copyProperties(productForm,productInfo);
-
-            try{
-                productService.save(productInfo);
+            try{ProductInfo productInfo1=productService.findOne(productForm.getProductId());
+                log.info("查找出来的商品是productInfo1={}",productInfo1);
+                BeanCopier copier=BeanCopier.create(ProductForm.class,ProductInfo.class,false);
+                copier.copy(productForm,productInfo1,null);
+                productService.save(productInfo1);
             }catch (SellException e){
                 map.put("msg",e.getMessage());
                 map.put("url","sell/seller/product/index");
                 return new ModelAndView("common/error",map);
             }
-        }else {
-            ProductInfo productInfo1=productService.findOne(productForm.getProductId());
-            log.info("查找出来的商品是productInfo1={}",productInfo1);
-            BeanCopier copier=BeanCopier.create(ProductForm.class,ProductInfo.class,false);
-            copier.copy(productForm,productInfo1,null);
-            productService.save(productInfo1);
             map.put("url","/sell/seller/product/list");
             return new ModelAndView("common/success",map);
         }
@@ -136,8 +127,5 @@ public class SellerProductController {
 
         //String productId=productForm.getProductId();
         //log.info("前端回传的隐藏productId={}",productId);
-
-        map.put("url","/sell/seller/product/list");
-        return new ModelAndView("common/success",map);
     }
-}
+
