@@ -17,7 +17,7 @@
                     </div>
                         <div class="form-group">
                             <label>商品价格</label>
-                            <input name="productPrice" type="number" class="form-control" value="${(productInfo.productPrice)!""}" />
+                            <input name="productPrice" type="text" class="form-control" value="${(productInfo.productPrice)!""}" />
                         </div>
                         <div class="form-group">
                             <label>库存</label>
@@ -44,7 +44,7 @@
                             </#list>
                             </select>
                         </div>
-                        <hidden input name="productId" type="text" value="${(productInfo.productId)!''}">
+                        <input hidden name="productId" type="text" value="${(productInfo.productId)!''}">
                         <button type="submit" class="btn btn-default">提交</button>
                     </form>
                 </div>

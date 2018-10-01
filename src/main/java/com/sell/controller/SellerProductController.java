@@ -4,24 +4,32 @@ import com.sell.dataobject.ProductCategory;
 import com.sell.dataobject.ProductInfo;
 import com.sell.enums.ProductStatusEnum;
 import com.sell.exception.SellException;
+import com.sell.forms.ProductForm;
 import com.sell.service.CategoryService;
 import com.sell.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/seller/product")
+@Slf4j
 public class SellerProductController {
 
     @Autowired
@@ -89,5 +97,45 @@ public class SellerProductController {
         List<ProductCategory> productCategoryList = categoryService.findAll();
         map.put("productCategoryList",productCategoryList);
         return new ModelAndView("product/index",map);
+    }
+
+    @PostMapping("/save")
+    public ModelAndView save(@RequestParam("productForm") ProductForm productForm,
+                             Map<String,Object>map){
+        /*
+        if (bindingResult.hasErrors()) {
+            map.put("msg",bindingResult.getFieldError().getDefaultMessage());
+            map.put("url","/sell/seller/product/index");
+            return new ModelAndView("common/error",map);
+        }*/
+
+        if (productForm.getProductId().isEmpty()){
+
+            ProductInfo productInfo=new ProductInfo();
+            BeanUtils.copyProperties(productForm,productInfo);
+
+            try{
+                productService.save(productInfo);
+            }catch (SellException e){
+                map.put("msg",e.getMessage());
+                map.put("url","sell/seller/product/index");
+                return new ModelAndView("common/error",map);
+            }
+        }else {
+            ProductInfo productInfo1=productService.findOne(productForm.getProductId());
+            BeanCopier copier=BeanCopier.create(ProductForm.class,ProductInfo.class,false);
+            copier.copy(productForm,productInfo1,null);
+            productService.save(productInfo1);
+            map.put("url","/sell/seller/product/list");
+            return new ModelAndView("common/success",map);
+        }
+
+
+
+        //String productId=productForm.getProductId();
+        //log.info("前端回传的隐藏productId={}",productId);
+
+        map.put("url","/sell/seller/product/list");
+        return new ModelAndView("common/success",map);
     }
 }
