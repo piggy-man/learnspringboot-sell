@@ -1,6 +1,7 @@
 package com.sell.repository;
 
 import com.sell.dataobject.ProductInfo;
+import com.sell.utils.KeyUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,13 +28,13 @@ public class ProductInfoRepositoryTest {
     @Test
     public void saveTest() {
         ProductInfo productInfo = new ProductInfo();
-        productInfo.setProductId("123456");
-        productInfo.setProductName("皮蛋粥");
-        productInfo.setProductDsp("好喝的粥");
-        productInfo.setProductIcon("http://*****");
-        productInfo.setProductPrice(new BigDecimal(3.2));
+        productInfo.setProductId(KeyUtil.KeyUniqueUtil());
+        productInfo.setProductName("热干面");
+        productInfo.setProductDsp("老家的味道");
+        productInfo.setProductIcon("http://******");
+        productInfo.setProductPrice(new BigDecimal(10));
         productInfo.setCategoryType(2);
-        productInfo.setProductStock(100);
+        productInfo.setProductStock(1000);
         productInfo.setProductStatus(0);
 
         ProductInfo result = productInfoRepository.save(productInfo);

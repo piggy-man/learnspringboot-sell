@@ -2,14 +2,13 @@ package com.sell.dataobject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sell.enums.ProductStatusEnum;
-import com.sell.service.CategoryService;
 import com.sell.utils.EnumUtil;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -23,6 +22,7 @@ public class ProductInfo {
     @Id
     @GeneratedValue
     private Integer id;
+
     private String productId;
 
     private String productName;
@@ -35,7 +35,7 @@ public class ProductInfo {
 
     private String productIcon;
 
-    private Integer productStatus;
+    private Integer productStatus=ProductStatusEnum.UP.getCode();
 
     private Integer categoryType;
 

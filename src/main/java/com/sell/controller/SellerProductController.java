@@ -6,6 +6,7 @@ import com.sell.exception.SellException;
 import com.sell.forms.ProductForm;
 import com.sell.service.CategoryService;
 import com.sell.service.ProductService;
+import com.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,16 +110,28 @@ public class SellerProductController {
             return new ModelAndView("common/error",map);
         }
 
-            try{ProductInfo productInfo1=productService.findOne(productForm.getProductId());
-                log.info("查找出来的商品是productInfo1={}",productInfo1);
-                BeanCopier copier=BeanCopier.create(ProductForm.class,ProductInfo.class,false);
-                copier.copy(productForm,productInfo1,null);
+        if (productForm.getProductId().isEmpty()){
+            ProductInfo productInfo=new ProductInfo();
+            productForm.setProductId(KeyUtil.KeyUniqueUtil());
+            BeanCopier beanCopier=BeanCopier.create(ProductForm.class,ProductInfo.class,false);
+            beanCopier.copy(productForm,productInfo,null);
+            ProductInfo productInfo1=productService.save(productInfo);
+            log.info("新建对象={}",productInfo1);
+        }else {
+
+            try {
+                ProductInfo productInfo1 = productService.findOne(productForm.getProductId());
+                log.info("查找出来的商品是productInfo1={}", productInfo1);
+                BeanCopier copier = BeanCopier.create(ProductForm.class, ProductInfo.class, false);
+                copier.copy(productForm, productInfo1, null);
                 productService.save(productInfo1);
-            }catch (SellException e){
-                map.put("msg",e.getMessage());
-                map.put("url","sell/seller/product/index");
-                return new ModelAndView("common/error",map);
+            } catch (SellException e) {
+                map.put("msg", e.getMessage());
+                map.put("url", "sell/seller/product/index");
+                return new ModelAndView("common/error", map);
             }
+        }
+
             map.put("url","/sell/seller/product/list");
             return new ModelAndView("common/success",map);
         }
