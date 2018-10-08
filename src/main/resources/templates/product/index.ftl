@@ -4,7 +4,6 @@
 <div id="wrapper" class="toggled">
 <#--侧边栏-->
     <#include "../common/nav.ftl">
-
 <#--内容-->
     <div id="page-content-wrapper">
         <div class="container-fluid">
@@ -51,11 +50,7 @@
             </div>
         </div>
     </div>
-
 </div>
-
-
 </body>
-
 </html>
 

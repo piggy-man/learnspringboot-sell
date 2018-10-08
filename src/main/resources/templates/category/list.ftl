@@ -39,7 +39,7 @@
                             ${category.updateTime}
                         </td>
                         <td>
-                        <a href="/sell/seller/category/modify?categroyId=${category.categoryId}">修改</a>
+                        <a href="/sell/seller/category/index?categoryId=${category.categoryId}">修改</a>
                         </td>
                     </#list>
                         </tbody>
